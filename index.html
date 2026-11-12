@@ -1,0 +1,1296 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Modelo Vetorial Generalizado (GVSM) - Apresentação Acadêmica</title>
+  
+  <!-- Estilos Gerais da Apresentação (Tema Claro Acadêmico) -->
+  <link rel="stylesheet" href="styles.css">
+
+  <!-- KaTeX para renderização matemática padrão TeX -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+
+  <!-- Controladores da Apresentação e Simulação -->
+  <script defer src="gvsm-engine.js"></script>
+  <script defer src="presentation.js"></script>
+</head>
+<body>
+
+  <!-- Barra Superior de Navegação -->
+  <header class="top-bar">
+    <div class="brand-badge">
+      <div class="brand-icon">GV</div>
+      <div>
+        <span class="brand-title">GVSM</span>
+        <span class="brand-subtitle">Modelo Vetorial Generalizado em Recuperação da Informação</span>
+      </div>
+    </div>
+
+    <div class="nav-actions">
+      <button class="nav-btn" id="btn-overview" title="Visão Geral de Todos os Slides (Atalho: O)">
+        Visão Geral
+      </button>
+      <button class="nav-btn" id="btn-fullscreen" title="Alternar Tela Cheia (F11)">
+        Tela Cheia
+      </button>
+    </div>
+  </header>
+
+  <!-- Barra de Progresso Superior -->
+  <div class="progress-container">
+    <div class="progress-fill"></div>
+  </div>
+
+  <!-- Container de Slides -->
+  <main class="deck-container">
+
+    <!-- ====================================================================
+         PARTE 1: FUNDAMENTOS E O DESAFIO DA ORTOGONALIDADE (Slides 1 a 6)
+         ==================================================================== -->
+
+    <!-- SLIDE 1 -->
+    <section class="slide active" data-slide="1">
+      <div class="slide-content text-center" style="text-align: center;">
+        <div class="part-tag">Parte 1: Introdução e Motivação</div>
+        <h1 class="slide-title" style="font-size: 2.7rem; margin: 1rem 0;">O Modelo Vetorial Generalizado (GVSM)</h1>
+        <p class="slide-subtitle" style="margin: 0 auto 2rem auto;">
+          Fundamentos geométricos da recuperação de informação baseada em co-ocorrência documental e quebra da hipótese de ortogonalidade.
+        </p>
+        
+        <div class="grid-3" style="margin-top: 1.5rem; text-align: left;">
+          <div class="academic-card highlight">
+            <div class="card-title">Objetivo do Estudo</div>
+            <p class="card-desc">Analisar a transição formal do modelo vetorial clássico (VSM) para um espaço vetorial generalizado induzido por padrões de mintermos.</p>
+          </div>
+          <div class="academic-card">
+            <div class="card-title">Abordagem Geométrica</div>
+            <p class="card-desc">Substituição de eixos ortogonais estritos por correlações angulares aprendidas a partir da distribuição dos dados na coleção.</p>
+          </div>
+          <div class="academic-card">
+            <div class="card-title">Ambiente Computacional</div>
+            <p class="card-desc">Implementação de laboratório interativo para análise quantitativa de matrizes de correlação e scores angulares.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 2 -->
+    <section class="slide" data-slide="2">
+      <div class="slide-content">
+        <div class="part-tag">Parte 1: Introdução e Motivação</div>
+        <h2 class="slide-heading">O Modelo Vetorial Clássico (VSM)</h2>
+        <p class="slide-subtitle">A formulação algébrica fundamental proposta por Gerard Salton na década de 1970.</p>
+
+        <div class="grid-2">
+          <div class="academic-card">
+            <div class="card-title">A Metáfora Espacial</div>
+            <p class="card-desc" style="margin-bottom: 0.8rem;">
+              O vocabulário da coleção define a base dimensional do espaço vetorial $\mathbb{R}^T$:
+            </p>
+            <ul style="padding-left: 1.2rem; font-size: 0.88rem; color: var(--text-secondary); line-height: 1.6;">
+              <li>Cada termo único $t_i$ constitui uma dimensão de base ortonormal.</li>
+              <li>Documentos e consultas são expressos como combinações lineares de pesos:</li>
+            </ul>
+            <div class="katex-display-box" style="margin-top: 0.8rem;">
+              $$\vec{d} = \sum_{i=1}^T w_{i,d} \, \vec{t}_i$$
+            </div>
+          </div>
+
+          <div class="academic-card highlight">
+            <div class="card-title">A Hipótese da Independência</div>
+            <p class="card-desc" style="margin-bottom: 0.8rem;">
+              O modelo assume ortogonalidade estrita entre todos os pares de termos distintos:
+            </p>
+            <div class="katex-display-box">
+              $$\vec{t}_i \cdot \vec{t}_j = \delta_{ij} = \begin{cases} 1, & \text{se } i = j \\ 0, & \text{se } i \neq j \end{cases}$$
+            </div>
+            <div class="academic-note">
+              <strong>Interpretação Geométrica:</strong> O produto interno nulo impõe que o conhecimento da presença do termo $t_i$ em um documento não fornece informação estatística sobre a presença do termo $t_j$. O ângulo entre quaisquer termos é fixado em $90^\circ$.
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 3: COMPASSO VETORIAL -->
+    <section class="slide" data-slide="3">
+      <div class="slide-content">
+        <div class="part-tag">Parte 1: Introdução e Motivação</div>
+        <h2 class="slide-heading">A Hipótese da Ortogonalidade: Ângulo Rígido de 90°</h2>
+        <p class="slide-subtitle">Comparação geométrica entre a premissa clássica e a aproximação angular induzida por co-ocorrência.</p>
+
+        <div class="vector-compass-container">
+          <div class="compass-svg-box" id="vector-compass-slide-3">
+            <!-- SVG dinâmico -->
+          </div>
+
+          <div class="compass-controls">
+            <div style="display: flex; gap: 0.5rem; margin-bottom: 1rem;">
+              <button class="nav-btn primary" id="s3-btn-vsm">Modelo VSM (Ortogonal 90°)</button>
+              <button class="nav-btn" id="s3-btn-gvsm">Modelo GVSM (Semântico 42°)</button>
+            </div>
+
+            <div class="academic-card" style="margin-bottom: 0.8rem;">
+              <div class="card-title" id="s3-compass-desc">
+                <strong>Modelo Clássico (VSM):</strong> Ângulo ortogonal de 90°. $\cos(90°) = 0$. Os termos são tratados como variáveis estritamente independentes.
+              </div>
+            </div>
+
+            <div class="academic-note">
+              <strong>Nota Explicativa:</strong> Sob ortogonalidade estrita ($\cos = 0$), uma consulta contendo apenas o termo <em>"Robótica"</em> apresentará similaridade nula com documentos restritos a termos semanticamente associados, como <em>"Automação"</em>.
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 4 -->
+    <section class="slide" data-slide="4">
+      <div class="slide-content">
+        <div class="part-tag">Parte 1: Introdução e Motivação</div>
+        <h2 class="slide-heading">Limitação Estrutural: A Incompatibilidade de Vocabulário</h2>
+        <p class="slide-subtitle">O impacto da sinonímia e da variação lexical na recuperação da informação.</p>
+
+        <div class="grid-2">
+          <div class="academic-card danger">
+            <div class="card-title">O Efeito da Sinonímia</div>
+            <p class="card-desc">
+              Divergências lexicais entre a formulação da consulta e a redação dos documentos produzem falha de recuperação:
+            </p>
+            <div style="margin-top: 0.8rem; background: #ffffff; border: 1px solid #fecaca; padding: 0.8rem; border-radius: 6px; font-size: 0.88rem;">
+              <div>• Consulta do usuário: <span class="badge-term term-cyan">"automóvel elétrico"</span></div>
+              <div>• Texto documental: <span class="badge-term term-rose">"veículo a bateria"</span></div>
+              <div style="color: #dc2626; margin-top: 0.5rem; font-weight: 700;">Similaridade no VSM Clássico: 0.000</div>
+            </div>
+          </div>
+
+          <div class="academic-card">
+            <div class="card-title">Necessidade de Projeção Semântica</div>
+            <p class="card-desc">
+              É indispensável um arcabouço matemático no qual termos que compartilham contextos de uso apresentem <strong>ângulos agudos ($\theta &lt; 90^\circ$)</strong>, refletindo proximidade no espaço de representação.
+            </p>
+            <div class="academic-note" style="margin-top: 1rem;">
+              <strong>Princípio Distribucional:</strong> A afinidade entre termos deve ser induzida diretamente a partir da distribuição estatística de suas co-ocorrências no corpus documental.
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 5 -->
+    <section class="slide" data-slide="5">
+      <div class="slide-content">
+        <div class="part-tag">Parte 1: Introdução e Motivação</div>
+        <h2 class="slide-heading">Caso de Estudo: Robótica e Automação</h2>
+        <p class="slide-subtitle">Avaliação do comportamento vetorial clássico em documentos de engenharia.</p>
+
+        <div class="grid-3">
+          <div class="academic-card">
+            <div class="card-title">Documento 1</div>
+            <p class="card-desc" style="font-style: italic;">
+              "Sistemas de <strong>robótica</strong> articulada para soldagem e manipulação."
+            </p>
+            <div style="margin-top: 0.8rem; font-size: 0.78rem; color: #0369a1; font-weight:600;">Termo primário: Robótica</div>
+          </div>
+
+          <div class="academic-card">
+            <div class="card-title">Documento 2</div>
+            <p class="card-desc" style="font-style: italic;">
+              "Sistemas de <strong>automação</strong> fabril e controle pneumático."
+            </p>
+            <div style="margin-top: 0.8rem; font-size: 0.78rem; color: #059669; font-weight:600;">Termo primário: Automação</div>
+          </div>
+
+          <div class="academic-card highlight">
+            <div class="card-title">Resultado no Modelo Clássico</div>
+            <p class="card-desc">
+              A ausência de sobreposição léxica direta acarreta produto escalar nulo entre as representações vetoriais dos dois documentos.
+            </p>
+            <div style="margin-top: 0.6rem; font-family: var(--font-mono); color: #dc2626; font-size: 0.85rem; font-weight: 700;">
+              Produto Escalar = 0.000
+            </div>
+          </div>
+        </div>
+
+        <div class="academic-note" style="margin-top: 1.5rem;">
+          <strong>Problema de Pesquisa:</strong> Como inferir e incorporar matematicamente as relações de dependência entre termos a partir da própria coleção de documentos, preservando a eficiência computacional?
+        </div>
+      </div>
+    </section>
+    <!-- SLIDE 6 -->
+    <section class="slide" data-slide="6">
+      <div class="slide-content">
+        <div class="part-tag">Parte 1: Introdução e Motivação</div>
+        <h2 class="slide-heading">Origem Histórica: Wong, Ziarko, Raghavan e Wong (1985)</h2>
+        <p class="slide-subtitle">A formalização pioneira do modelo de espaço vetorial generalizado na literatura de RI.</p>
+
+        <div class="grid-2">
+          <div class="academic-card highlight">
+            <div class="card-title">Publicações Seminais (1985)</div>
+            <p class="card-desc">
+              O GVSM foi introduzido na conferência principal e consolidado no periódico de referência da ACM:
+            </p>
+            <div style="margin: 0.6rem 0; font-family: var(--font-serif); font-size: 0.95rem; color: #0f172a; line-height: 1.45;">
+              <strong>1. ACM SIGIR (1985):</strong><br>
+              <em>"Generalized vector space model in information retrieval"</em><br>
+              <span style="font-size: 0.82rem; color: #475569;">S. K. M. Wong, W. Ziarko, P. C. N. Wong.</span>
+            </div>
+            <div style="margin: 0.6rem 0; font-family: var(--font-serif); font-size: 0.95rem; color: #0f172a; line-height: 1.45;">
+              <strong>2. ACM TODS (Dez. 1985, Vol. 10, Nº 4):</strong><br>
+              <em>"On modeling of information retrieval concepts in vector spaces"</em><br>
+              <span style="font-size: 0.82rem; color: #475569;">S. K. M. Wong, W. Ziarko, V. V. Raghavan, P. C. N. Wong.</span>
+            </div>
+          </div>
+
+          <div class="academic-card">
+            <div class="card-title">Rigor Canônico (Baeza-Yates & Ribeiro-Neto)</div>
+            <p class="card-desc">
+              No livro clássico <em>Modern Information Retrieval</em> (Capítulo 2), Baeza-Yates e Ribeiro-Neto consagram esta formulação:
+            </p>
+            <blockquote style="margin: 0.8rem 0; border-left: 3px solid var(--academic-navy); padding-left: 0.8rem; color: #334155; font-size: 0.88rem; font-style: italic;">
+              "A correlação mútua entre termos é expressa através de uma base ortonormal de mintermos, onde os vetores de termos são normalizados para norma unitária."
+            </blockquote>
+            <p class="card-desc">
+              A quebra da ortogonalidade dos termos ocorre sem violar os axiomas de espaços euclidianos, fornecendo uma base sólida para a expansão semântica.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 7 -->
+    <section class="slide" data-slide="7">
+      <div class="slide-content">
+        <div class="part-tag indigo">Parte 2: Mintermos e Topologia</div>
+        <h2 class="slide-heading">Estrutura e Definição de Mintermos</h2>
+        <p class="slide-subtitle">Representação booleana das configurações exclusivas de ocorrência dos termos.</p>
+
+        <div class="grid-2">
+          <div class="academic-card">
+            <div class="card-title">Conceito de Padrão de Presença</div>
+            <p class="card-desc">
+              Para um vocabulário de $T$ termos, cada documento manifesta uma assinatura binária:
+            </p>
+            <div style="margin-top: 0.8rem; font-family: var(--font-mono); font-size: 0.85rem; line-height: 1.7; color: #334155;">
+              <div>[1, 1, 0] = Presença de t₁, Presença de t₂, Ausência de t₃.</div>
+              <div>[1, 0, 1] = Presença de t₁, Ausência de t₂, Presença de t₃.</div>
+              <div>[0, 0, 1] = Ausência de t₁, Ausência de t₂, Presença de t₃.</div>
+            </div>
+          </div>
+
+          <div class="academic-card highlight">
+            <div class="card-title">Definição Booleana Formal</div>
+            <div class="katex-display-box">
+              $$m_r = x_1 \wedge x_2 \wedge \dots \wedge x_T, \quad x_i \in \{t_i, \bar{t}_i\}$$
+            </div>
+            <div class="academic-note">
+              <strong>Formalização:</strong> Um mintermo representa a conjunção de literais onde cada termo do vocabulário comparece sob forma afirmada ($t_i$) ou negada ($\bar{t}_i$). As partições resultantes são mutuamente exclusivas e exaustivas.
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 8 -->
+    <section class="slide" data-slide="8">
+      <div class="slide-content">
+        <div class="part-tag indigo">Parte 2: Mintermos e Topologia</div>
+        <h2 class="slide-heading">O Espaço de Mintermos como Base Ortogonal</h2>
+        <p class="slide-subtitle">A transferência da condição de ortogonalidade dos termos para os mintermos.</p>
+
+        <div class="grid-3">
+          <div class="academic-card">
+            <div class="card-title">1. Condição de Ortogonalidade</div>
+            <p class="card-desc">
+              No GVSM, a propriedade de ortonormalidade é transferida integralmente aos vetores de mintermo:
+            </p>
+            <div class="katex-display-box" style="margin-top: 0.5rem;">
+              $$\vec{m}_r \cdot \vec{m}_s = \delta_{rs}$$
+            </div>
+          </div>
+
+          <div class="academic-card">
+            <div class="card-title">2. Independência Mútua</div>
+            <p class="card-desc">
+              Como cada documento pertence a exatamente um padrão binário, os mintermos constituem subconjuntos disjuntos do espaço amostral documental.
+            </p>
+          </div>
+
+          <div class="academic-card highlight">
+            <div class="card-title">3. Projeção dos Termos</div>
+            <p class="card-desc">
+              Cada vetor de termo $\vec{t}_i$ é redefinido como uma combinação linear sobre a base de mintermos.
+            </p>
+            <div class="academic-note" style="margin-top: 0.5rem;">
+              <strong>Estrutura:</strong> Os mintermos constituem a base canônica ortonormal; os termos tornam-se vetores densos com dependência mútua induzida.
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- SLIDE 9 -->
+    <section class="slide" data-slide="9">
+      <div class="slide-content">
+        <div class="part-tag indigo">Parte 2: Mintermos e Topologia</div>
+        <h2 class="slide-heading">Fluxo Computacional do GVSM (Baeza-Yates & Wong)</h2>
+        <p class="slide-subtitle">Sequência de transformações da coleção documental até a matriz de correlação e scores angulares.</p>
+
+        <div class="visual-pipeline">
+          <div class="pipeline-step">
+            <div class="pipeline-step-num">ETAPA 01</div>
+            <div class="pipeline-step-title">Documentos da Coleção</div>
+            <p style="font-size: 0.8rem; color: #475569;">Extração do vocabulário e frequências ponderadas $w_{i,d}$.</p>
+          </div>
+          <div class="pipeline-arrow">→</div>
+
+          <div class="pipeline-step">
+            <div class="pipeline-step-num">ETAPA 02</div>
+            <div class="pipeline-step-title">Mapeamento de Mintermos</div>
+            <p style="font-size: 0.8rem; color: #475569;">Identificação das configurações binárias ativas ($p \le N$).</p>
+          </div>
+          <div class="pipeline-arrow">→</div>
+
+          <div class="pipeline-step active">
+            <div class="pipeline-step-num">ETAPA 03</div>
+            <div class="pipeline-step-title">Projeção Normalizada $\hat{C}$</div>
+            <p style="font-size: 0.8rem; color: #475569;">Cálculo de $c_{i,r}$ e normalização euclidiana $\hat{c}_{i,r}$ ($\|\vec{t}_i\| = 1$).</p>
+          </div>
+          <div class="pipeline-arrow">→</div>
+
+          <div class="pipeline-step">
+            <div class="pipeline-step-num">ETAPA 04</div>
+            <div class="pipeline-step-title">Matriz $T = \hat{C}\hat{C}^T$</div>
+            <p style="font-size: 0.8rem; color: #475569;">Cossenos diretos ($T_{ij} = \cos\theta_{ij}$) e diagonal $T_{ii} = 1.0$.</p>
+          </div>
+        </div>
+
+        <div class="academic-note" style="margin-top: 1.5rem;">
+          <strong>Síntese do Processo:</strong> A normalização euclidiana das linhas da matriz de mintermos assegura que cada vetor de termo resida na hiperesfera unitária, permitindo que a correlação mútua corresponda diretamente ao cosseno do ângulo entre os termos.
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 10 -->
+    <section class="slide" data-slide="10">
+      <div class="slide-content">
+        <div class="part-tag indigo">Parte 2: Mintermos e Topologia</div>
+        <h2 class="slide-heading">Dimensionalidade: Mintermos Teóricos vs. Ativos</h2>
+        <p class="slide-subtitle">Solução para o problema da complexidade combinatória na implementação prática.</p>
+
+        <div class="grid-2">
+          <div class="academic-card danger">
+            <div class="card-title">Complexidade Teórica: $2^T$ Mintermos</div>
+            <p class="card-desc">
+              O número teórico de combinações booleanas cresce exponencialmente com o tamanho do vocabulário:
+            </p>
+            <div class="katex-display-box" style="margin: 0.6rem 0;">
+              $$p_{\text{teórico}} = 2^T \implies 2^{100} \approx 1.26 \times 10^{30}$$
+            </div>
+            <p class="card-desc">
+              Essa cardinalidade inviabilizaria qualquer algoritmo que tentasse materializar o espaço completo.
+            </p>
+          </div>
+
+          <div class="academic-card highlight">
+            <div class="card-title">Tratabilidade Prática: Mintermos Ativos</div>
+            <p class="card-desc">
+              Apenas mintermos que descrevem ao menos um documento existente são instanciados na base:
+            </p>
+            <div class="katex-display-box" style="margin: 0.6rem 0;">
+              $$p \le N \quad (N = \text{número de documentos da coleção})$$
+            </div>
+            <div class="academic-note">
+              <strong>Garantia de Escalabilidade:</strong> Como o número de mintermos ativos é estritamente limitado pelo número de documentos $N$, o espaço matricial torna-se computacionalmente tratável.
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- SLIDE 11 -->
+    <section class="slide" data-slide="11">
+      <div class="slide-content">
+        <div class="part-tag emerald">Sequência Metodológica • Passo 1 de 4</div>
+        <h2 class="slide-heading">Passo 1: Coleção Documental de Referência</h2>
+        <p class="slide-subtitle">Definição do corpus analítico para demonstração do mecanismo de co-ocorrência em 1ª ordem.</p>
+
+        <div class="story-card">
+          <div class="story-step-badge">Documento D1</div>
+          <div style="flex: 1;">
+            <div style="font-weight: 700; color: #0f172a; font-size: 0.95rem; margin-bottom: 0.2rem;">Manufatura Robótica</div>
+            <p style="font-size: 0.92rem; color: #334155;">
+              "Aplicações de <span class="badge-term term-cyan">Robótica</span> e <span class="badge-term term-indigo">Programação</span> em linhas de montagem."
+            </p>
+          </div>
+        </div>
+
+        <div class="story-card">
+          <div class="story-step-badge">Documento D2</div>
+          <div style="flex: 1;">
+            <div style="font-weight: 700; color: #0f172a; font-size: 0.95rem; margin-bottom: 0.2rem;">Automação Industrial</div>
+            <p style="font-size: 0.92rem; color: #334155;">
+              "Sistemas de <span class="badge-term term-emerald">Automação</span> e <span class="badge-term term-cyan">Robótica</span> para manufatura moderna."
+            </p>
+          </div>
+        </div>
+
+        <div class="story-card">
+          <div class="story-step-badge">Documento D3</div>
+          <div style="flex: 1;">
+            <div style="font-weight: 700; color: #0f172a; font-size: 0.95rem; margin-bottom: 0.2rem;">Engenharia de Software</div>
+            <p style="font-size: 0.92rem; color: #334155;">
+              "Desenvolvimento de código e <span class="badge-term term-indigo">Programação</span> concorrente."
+            </p>
+          </div>
+        </div>
+
+        <div class="academic-note">
+          <strong>Distribuição dos Termos:</strong> <em>Robótica</em> co-ocorre com <em>Programação</em> em $D_1$. <em>Robótica</em> co-ocorre com <em>Automação</em> em $D_2$. Os termos <em>Programação</em> e <em>Automação</em> <strong>nunca co-ocorrem juntos</strong> em nenhum documento do corpus.
+        </div>
+      </div>
+    </section>
+    <!-- SLIDE 12 -->
+    <section class="slide" data-slide="12">
+      <div class="slide-content">
+        <div class="part-tag emerald">Sequência Metodológica • Passo 2 de 4</div>
+        <h2 class="slide-heading">Passo 2: Mapeamento dos Mintermos Ativos</h2>
+        <p class="slide-subtitle">Construção da tabela de configurações booleanas a partir dos documentos observados.</p>
+
+        <div class="matrix-container" style="margin-bottom: 1rem;">
+          <table class="matrix-table">
+            <thead>
+              <tr>
+                <th>Documento</th>
+                <th style="color: #0369a1;">t₁: Robótica</th>
+                <th style="color: #3730a3;">t₂: Programação</th>
+                <th style="color: #166534;">t₃: Automação</th>
+                <th>Mintermo Ativo</th>
+                <th>Descrição do Padrão Observado</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td style="font-weight:700;">D1</td>
+                <td class="cell-active">1</td>
+                <td class="cell-active">1</td>
+                <td class="cell-zero">0</td>
+                <td style="font-weight: 700; color: #0369a1;">m₆</td>
+                <td style="text-align: left;">Co-ocorrência em 1ª ordem de Robótica e Programação</td>
+              </tr>
+              <tr>
+                <td style="font-weight:700;">D2</td>
+                <td class="cell-active">1</td>
+                <td class="cell-zero">0</td>
+                <td class="cell-active">1</td>
+                <td style="font-weight: 700; color: #166534;">m₅</td>
+                <td style="text-align: left;">Co-ocorrência em 1ª ordem de Robótica e Automação</td>
+              </tr>
+              <tr>
+                <td style="font-weight:700;">D3</td>
+                <td class="cell-zero">0</td>
+                <td class="cell-active">1</td>
+                <td class="cell-zero">0</td>
+                <td style="font-weight: 700; color: #3730a3;">m₂</td>
+                <td style="text-align: left;">Ocorrência isolada de Programação</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="academic-note">
+          <strong>Propriedade Teórica Fundamental:</strong> Observe que <strong>nenhum mintermo ativo</strong> apresenta simultaneamente $t_2=1$ (Programação) e $t_3=1$ (Automação). No GVSM, isso implica matematicamente que o produto interno entre Programação e Automação será estritamente zero: $T_{23} = \vec{t}_2 \cdot \vec{t}_3 = 0.00$.
+        </div>
+      </div>
+    </section>
+    <!-- SLIDE 13 -->
+    <section class="slide" data-slide="13">
+      <div class="slide-content">
+        <div class="part-tag emerald">Sequência Metodológica • Passo 3 de 4</div>
+        <h2 class="slide-heading">Passo 3: Co-ocorrência de 1ª Ordem vs. Projeção Documental</h2>
+        <p class="slide-subtitle">Diagrama de conjuntos demonstrando por que $T_{23} = 0$, mas o documento $D_1$ é recuperado.</p>
+
+        <div class="grid-2" style="align-items: center;">
+          <div style="background: #ffffff; border: 1px solid var(--border-subtle); border-radius: 8px; padding: 1.25rem; text-align: center; box-shadow: var(--shadow-sm);">
+            <svg viewBox="0 0 320 240" width="300" height="230">
+              <!-- Círculo Robótica -->
+              <circle cx="160" cy="90" r="65" fill="#e0f2fe" stroke="#0284c7" stroke-width="2" opacity="0.6"/>
+              <text x="160" y="45" fill="#0369a1" font-size="12" font-weight="700" text-anchor="middle">Robótica</text>
+
+              <!-- Círculo Programação -->
+              <circle cx="110" cy="155" r="65" fill="#e0e7ff" stroke="#4f46e5" stroke-width="2" opacity="0.6"/>
+              <text x="75" y="195" fill="#3730a3" font-size="12" font-weight="700" text-anchor="middle">Programação</text>
+
+              <!-- Círculo Automação -->
+              <circle cx="210" cy="155" r="65" fill="#dcfce7" stroke="#16a34a" stroke-width="2" opacity="0.6"/>
+              <text x="245" y="195" fill="#166534" font-size="12" font-weight="700" text-anchor="middle">Automação</text>
+
+              <!-- Documentos em suas Intersecções -->
+              <rect x="110" y="100" width="32" height="20" rx="3" fill="#0284c7"/>
+              <text x="126" y="114" fill="#ffffff" font-size="9" font-weight="700" text-anchor="middle">Doc 1</text>
+
+              <rect x="180" y="100" width="32" height="20" rx="3" fill="#16a34a"/>
+              <text x="196" y="114" fill="#ffffff" font-size="9" font-weight="700" text-anchor="middle">Doc 2</text>
+
+              <!-- Intersecção Vazia destacada -->
+              <text x="160" y="195" fill="#dc2626" font-size="9.5" font-weight="700" text-anchor="middle">Intersecção Vazia</text>
+              <text x="160" y="210" fill="#dc2626" font-size="8.5" font-family="var(--font-mono)" text-anchor="middle">T(Prog, Auto) = 0.00</text>
+            </svg>
+          </div>
+
+          <div class="academic-card highlight">
+            <div class="card-title">O Verdadeiro Mecanismo do GVSM</div>
+            <p class="card-desc" style="margin-bottom: 0.6rem;">
+              O GVSM modela <strong>co-ocorrência direta (1ª ordem)</strong>:
+            </p>
+            <ul style="padding-left: 1.2rem; font-size: 0.86rem; color: #334155; line-height: 1.55;">
+              <li>$\vec{t}_{\text{prog}} \cdot \vec{t}_{\text{auto}} = 0.00$, pois nunca aparecem no mesmo mintermo ativo.</li>
+              <li>Porém, o Documento $D_1$ contém <em>Robótica</em>, cujo vetor $\vec{t}_{\text{rob}}$ possui componente no mintermo $m_5$ (onde co-ocorre com <em>Automação</em> em $D_2$).</li>
+              <li>A consulta $q = \text{"Automação"}$ ativa o mintermo $m_5$.</li>
+            </ul>
+            <div class="academic-note" style="margin-top: 0.8rem;">
+              <strong>Resgate por Projeção:</strong> A recuperação cruzada ocorre no nível do <strong>documento</strong> (espaço de mintermos $\mathbb{R}^p$), não por correlação espúria de 2ª ordem entre palavras na matriz $T$.
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- SLIDE 14 -->
+    <section class="slide" data-slide="14">
+      <div class="slide-content">
+        <div class="part-tag emerald">Sequência Metodológica • Passo 4 de 4</div>
+        <h2 class="slide-heading">Passo 4: A Busca na Prática (Resgate Indireto de D1)</h2>
+        <p class="slide-subtitle">Demonstração quantitativa: como uma consulta por "Automação" recupera o Documento $D_1$.</p>
+
+        <div class="grid-2">
+          <div class="academic-card">
+            <div class="card-title">Consulta Submetida</div>
+            <div style="background: #f8fafc; border: 1px solid var(--border-subtle); padding: 0.85rem; border-radius: 6px; margin: 0.5rem 0;">
+              <div style="font-size: 0.78rem; color: var(--text-muted);">Consulta de Teste:</div>
+              <div style="font-size: 1.15rem; font-weight: 700; color: #0284c7;">$q = \text{"Automação"}$</div>
+            </div>
+            <p class="card-desc">
+              Avaliação sobre o Documento $D_1$: <em>"Aplicações de Robótica e Programação em linhas de montagem"</em>. O texto de $D_1$ <strong>não contém</strong> a palavra "Automação".
+            </p>
+          </div>
+
+          <div class="academic-card highlight">
+            <div class="card-title">Resultado Comparativo de Relevância</div>
+            <div style="margin: 0.6rem 0;">
+              <div style="margin-bottom: 0.8rem;">
+                <div style="display: flex; justify-content: space-between; font-size: 0.85rem;">
+                  <span>VSM Clássico em D1:</span>
+                  <span style="color: #dc2626; font-family: var(--font-mono); font-weight:700;">Score = 0.000 (Invisível)</span>
+                </div>
+                <div class="bar-track" style="margin-top: 0.3rem;"><div class="bar-val vsm" style="width: 0%;"></div></div>
+              </div>
+
+              <div>
+                <div style="display: flex; justify-content: space-between; font-size: 0.85rem;">
+                  <span style="color: #0369a1; font-weight: 700;">GVSM em D1:</span>
+                  <span style="color: #0369a1; font-family: var(--font-mono); font-weight: 700;">Score = 0.408 (40.8% - Recuperado!)</span>
+                </div>
+                <div class="bar-track" style="margin-top: 0.3rem;"><div class="bar-val gvsm" style="width: 40.8%;"></div></div>
+              </div>
+            </div>
+            <div class="academic-note" style="margin-top: 0.8rem;">
+              <strong>Mecanismo Algébrico e Cálculo Exato:</strong> A consulta $\vec{q} = \vec{t}_{\text{auto}} = (0, 1, 0)^T$ projeta sobre $\vec{m}_5$. O documento $D_1$ projeta $\vec{d}_1 = \vec{t}_{\text{rob}} + \vec{t}_{\text{prog}} = (\sqrt{2}, 1/\sqrt{2}, 1/\sqrt{2})^T$, com $\|\vec{d}_1\| = \sqrt{3}$. O cosseno exato resulta em:
+              $$\text{sim}(q, D_1) = \frac{\vec{q} \cdot \vec{d}_1}{\|\vec{q}\| \|\vec{d}_1\|} = \frac{1/\sqrt{2}}{1 \cdot \sqrt{3}} = \frac{1}{\sqrt{6}} \approx \mathbf{0.408}$$
+              Confirmando formalmente a recuperação semântica de $D_1$ sem a presença léxica direta de "Automação".
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- SLIDE 15: COMPASSO COM SLIDER -->
+    <section class="slide" data-slide="15">
+      <div class="slide-content">
+        <div class="part-tag emerald">Geometria Interativa</div>
+        <h2 class="slide-heading">Transformação Geométrica: Fechamento Angular</h2>
+        <p class="slide-subtitle">Variação contínua do ângulo vetorial em função do grau de co-ocorrência documental.</p>
+
+        <div class="vector-compass-container">
+          <div class="compass-svg-box" id="vector-compass-slide-15">
+            <!-- Renderizado dinamicamente -->
+          </div>
+
+          <div class="compass-controls">
+            <div style="margin-bottom: 1rem;">
+              <label style="font-size: 0.85rem; color: #475569; display: block; margin-bottom: 0.4rem; font-weight:600;">
+                Ajuste do Grau de Dependência Empírica ($\theta$):
+              </label>
+              <input type="range" id="s15-angle-slider" min="20" max="90" value="38" style="width: 100%; cursor: pointer;">
+              <div style="display: flex; justify-content: space-between; font-family: var(--font-mono); font-size: 0.78rem; color: #64748b; margin-top: 0.3rem;">
+                <span>Alta Co-ocorrência (20°)</span>
+                <span id="s15-angle-display" style="color: #0284c7; font-weight: 700; font-size: 0.95rem;">38°</span>
+                <span>Ortogonalidade VSM (90°)</span>
+              </div>
+            </div>
+
+            <div class="academic-card" style="margin-bottom: 0.8rem;">
+              <div class="card-title">Coeficiente de Cosseno ($\cos \theta$):</div>
+              <div style="font-family: var(--font-mono); font-size: 1.6rem; color: #0284c7; font-weight: 800;" id="s15-cos-display">
+                0.788
+              </div>
+            </div>
+
+            <div class="academic-note">
+              <strong>Propriedade Trigonométrica:</strong> O cosseno decresce monotonicamente com o aumento do ângulo ($\cos 0^\circ = 1.0$, $\cos 90^\circ = 0.0$). O GVSM expressa graus empíricos de sinonímia por meio de ângulos agudos no subespaço de mintermos.
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         PARTE 3: FORMALIZAÇÃO MATRICIAL (Slides 16 a 22)
+         ==================================================================== -->
+
+    <!-- SLIDE 16 -->
+    <section class="slide" data-slide="16">
+      <div class="slide-content">
+        <div class="part-tag amber">Parte 3: Formalização Matricial</div>
+        <h2 class="slide-heading">Estrutura Matricial do Modelo</h2>
+        <p class="slide-subtitle">Organização algébrica das relações entre termos e mintermos.</p>
+
+        <div class="grid-2">
+          <div class="academic-card">
+            <div class="card-title">Organização dos Dados</div>
+            <p class="card-desc">
+              O modelo consolida a informação empírica da coleção em representações matriciais bidimensionais:
+            </p>
+            <ul style="padding-left: 1.2rem; font-size: 0.88rem; color: #334155; line-height: 1.6; margin-top: 0.8rem;">
+              <li>As linhas correspondem aos termos do vocabulário ($t_1, t_2, \dots, t_T$).</li>
+              <li>As colunas correspondem aos mintermos ativos ($m_1, m_2, \dots, m_p$).</li>
+            </ul>
+          </div>
+
+          <div class="academic-card highlight">
+            <div class="card-title">Componentes Principais ($\hat{C}$ e $T$)</div>
+            <p class="card-desc">
+              O arcabouço computacional é estruturado em duas matrizes:
+            </p>
+            <div style="margin-top: 0.8rem; font-size: 0.88rem; color: #1e293b;">
+              <div><strong>1. Matriz de Padrões Normalizada $\hat{C}$ ($T \times p$):</strong> Projeção unitária dos termos nos mintermos.</div>
+              <div style="margin-top: 0.4rem;"><strong>2. Matriz de Correlação $T = \hat{C}\hat{C}^T$ ($T \times T$):</strong> Coeficientes exatos de afinidade mútua entre termos.</div>
+            </div>
+            <div class="academic-note" style="margin-top: 1rem;">
+              <strong>Eficiência:</strong> Uma vez calculadas, as matrizes permitem avaliar similaridades em tempo linear em relação à cardinalidade dos mintermos ativos.
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- SLIDE 17 -->
+    <section class="slide" data-slide="17">
+      <div class="slide-content">
+        <div class="part-tag amber">Parte 3: Formalização Matricial</div>
+        <h2 class="slide-heading">O Vetor de Mintermo Canônico $\vec{m}_r \in \mathbb{R}^p$</h2>
+        <p class="slide-subtitle">A definição analítica rigorosa da base ortonormal de mintermos ativos.</p>
+
+        <div class="grid-2">
+          <div class="academic-card">
+            <div class="card-title">Vetor Canônico Unitário em $\mathbb{R}^p$</div>
+            <div class="katex-display-box">
+              $$\vec{m}_r = (0, \dots, 0, \underbrace{1}_{r\text{-ésima posição}}, 0, \dots, 0)^T \in \mathbb{R}^p$$
+            </div>
+            <p class="card-desc">
+              Cada mintermo ativo $r \in \{1, \dots, p\}$ corresponde ao $r$-ésimo vetor canônico do espaço $\mathbb{R}^p$, com norma unitária $\|\vec{m}_r\| = 1$.
+            </p>
+          </div>
+
+          <div class="academic-card highlight">
+            <div class="card-title">Diferenciação: Assinatura vs. Vetor Base</div>
+            <div class="academic-note" style="margin-top: 0;">
+              <strong>Distinção Conceitual Indispensável:</strong><br>
+              • <strong>Assinatura Booleana (Slide 7):</strong> Tupla $(x_1, \dots, x_T) \in \{0, 1\}^T$ no espaço dos termos, que identifica quais palavras estão presentes ou ausentes.<br>
+              • <strong>Vetor de Mintermo $\vec{m}_r$ (Slide 17):</strong> Vetor canônico no espaço $\mathbb{R}^p$ gerado pelos $p$ mintermos ativos observados.
+            </div>
+            <p class="card-desc" style="margin-top: 0.6rem;">
+              Essa formulação garante ortonormalidade exata: $\vec{m}_r \cdot \vec{m}_s = \delta_{rs}$ para quaisquer $r, s$.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 18 -->
+    <section class="slide" data-slide="18">
+      <div class="slide-content">
+        <div class="part-tag amber">Parte 3: Formalização Matricial</div>
+        <h2 class="slide-heading">A Matriz de Padrões $C$</h2>
+        <p class="slide-subtitle">Definição dos pesos dos termos no subespaço de mintermos ativos.</p>
+
+        <div class="katex-display-box">
+          $$c_{i,r} = \sum_{d_k \in m_r} w_{i,k}$$
+        </div>
+
+        <div class="academic-note">
+          <strong>Definição Algébrica:</strong> O coeficiente $c_{i,r}$ expressa o peso acumulado do termo $t_i$ no conjunto de documentos pertencentes ao mintermo $m_r$. Se o termo não comparece nos documentos associados a $m_r$, então $c_{i,r} = 0$.
+        </div>
+
+        <div class="grid-3" style="margin-top: 1rem;">
+          <div class="academic-card">
+            <div class="card-title">Linhas ($T$)</div>
+            <p class="card-desc">Termos que integram o vocabulário indexado da coleção.</p>
+          </div>
+          <div class="academic-card">
+            <div class="card-title">Colunas ($p$)</div>
+            <p class="card-desc">Mintermos ativos observados em ao menos um documento.</p>
+          </div>
+          <div class="academic-card highlight">
+            <div class="card-title">Célula ($c_{i,r}$)</div>
+            <p class="card-desc">Intensidade com que o termo $t_i$ participa do padrão $m_r$.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- SLIDE 19 -->
+    <section class="slide" data-slide="19">
+      <div class="slide-content">
+        <div class="part-tag amber">Parte 3: Formalização Matricial</div>
+        <h2 class="slide-heading">Formulação e Normalização dos Termos (Baeza-Yates / Wong)</h2>
+        <p class="slide-subtitle">Construção do coeficiente normalizado $\hat{c}_{i,r}$ e do vetor unitário $\|\vec{t}_i\| = 1$.</p>
+
+        <div class="grid-2">
+          <div class="academic-card">
+            <div class="card-title">1. Pesos Brutos nos Mintermos</div>
+            <div class="katex-display-box">
+              $$c_{i,r} = \sum_{d_k \in m_r} w_{i,k}$$
+            </div>
+            <p class="card-desc">
+              Soma das frequências ponderadas do termo $t_i$ nos documentos pertencentes à partição $m_r$.
+            </p>
+          </div>
+
+          <div class="academic-card highlight">
+            <div class="card-title">2. Normalização Euclidiana e Vetor Unitário</div>
+            <div class="katex-display-box">
+              $$\hat{c}_{i,r} = \frac{c_{i,r}}{\sqrt{\sum_{s=1}^p c_{i,s}^2}} \quad \implies \quad \vec{t}_i = \sum_{r=1}^p \hat{c}_{i,r} \, \vec{m}_r$$
+            </div>
+            <div class="academic-note">
+              <strong>Garantia de Norma Unitária:</strong> No modelo canônico de Baeza-Yates e Wong (1985), os coeficientes da Matriz $\hat{C}$ são estritamente normalizados ao longo dos mintermos, garantindo que todo vetor de termo seja unitário:
+              $$\|\vec{t}_i\| = \sqrt{\sum_{r=1}^p \hat{c}_{i,r}^2} = 1.0$$
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- SLIDE 20 -->
+    <section class="slide" data-slide="20">
+      <div class="slide-content">
+        <div class="part-tag amber">Parte 3: Formalização Matricial</div>
+        <h2 class="slide-heading">A Matriz de Correlação de Termos ($T = \hat{C} \hat{C}^T$)</h2>
+        <p class="slide-subtitle">Produtos internos exatos e direta correspondência com os cossenos de afinidade.</p>
+
+        <div class="grid-2">
+          <div class="academic-card highlight">
+            <div class="card-title">Formulação Central Canônica</div>
+            <div class="katex-display-box">
+              $$T = \hat{C} \cdot \hat{C}^T \quad \implies \quad T_{ij} = \vec{t}_i \cdot \vec{t}_j = \sum_{r=1}^p \hat{c}_{i,r} \, \hat{c}_{j,r} = \cos(\theta_{ij})$$
+            </div>
+            <div class="academic-note">
+              <strong>Harmonia Algébrica:</strong> Como os vetores $\vec{t}_i$ possuem norma unitária ($\|\vec{t}_i\| = 1$), a matriz de correlação $T = \hat{C}\hat{C}^T$ expressa de forma <strong>direta e exata</strong> os cossenos angulares entre os termos, sem necessitar de ajustes posteriores!
+            </div>
+          </div>
+
+          <div class="academic-card">
+            <div class="card-title">Propriedades Estruturais da Matriz T</div>
+            <ul style="padding-left: 1.2rem; font-size: 0.88rem; color: #334155; line-height: 1.6;">
+              <li><strong>Diagonal Principal Estritamente Unitária:</strong> $T_{ii} = \vec{t}_i \cdot \vec{t}_i = \|\vec{t}_i\|^2 = 1.00$.</li>
+              <li><strong>Igualdade de Cosseno:</strong> $T_{ij} = \cos(\theta_{ij}) \in [0, 1]$.</li>
+              <li><strong>Co-ocorrência em 1ª Ordem:</strong> Se termos não compartilham mintermos ativos ($\hat{c}_{i,r}\hat{c}_{j,r} = 0 \; \forall r$), então $T_{ij} = 0.00$.</li>
+              <li><strong>Simetria Estrita:</strong> $T_{ij} = T_{ji}$ e matriz semidefinida positiva.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- SLIDE 21 -->
+    <section class="slide" data-slide="21">
+      <div class="slide-content">
+        <div class="part-tag amber">Parte 3: Formalização Matricial</div>
+        <h2 class="slide-heading">Análise Numérica da Matriz de Correlação</h2>
+        <p class="slide-subtitle">Exemplo analítico derivado estritamente do mini-corpus de 3 documentos.</p>
+
+        <div class="matrix-container" style="margin-bottom: 0.8rem;">
+          <table class="matrix-table">
+            <thead>
+              <tr>
+                <th>Termo</th>
+                <th style="color: #0369a1;">Robótica</th>
+                <th style="color: #3730a3;">Programação</th>
+                <th style="color: #166534;">Automação</th>
+                <th>Interpretação Estrutural</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td style="font-weight:700; color: #0369a1;">Robótica</td>
+                <td style="background: #f0f9ff; font-weight:700; color:#0369a1;">1.00</td>
+                <td style="background: #f8fafc; font-weight:600;">0.50</td>
+                <td style="background: #f8fafc; font-weight:600;">0.71</td>
+                <td style="text-align: left;">Termo central com co-ocorrência em $m_6$ e $m_5$.</td>
+              </tr>
+              <tr>
+                <td style="font-weight:700; color: #3730a3;">Programação</td>
+                <td style="background: #f8fafc; font-weight:600;">0.50</td>
+                <td style="background: #f0f9ff; font-weight:700; color:#0369a1;">1.00</td>
+                <td style="background: #ffffff; color: #94a3b8; font-weight:700;">0.00</td>
+                <td style="text-align: left;">Sem co-ocorrência direta em mintermos compartilhados.</td>
+              </tr>
+              <tr>
+                <td style="font-weight:700; color: #166534;">Automação</td>
+                <td style="background: #f8fafc; font-weight:600;">0.71</td>
+                <td style="background: #ffffff; color: #94a3b8; font-weight:700;">0.00</td>
+                <td style="background: #f0f9ff; font-weight:700; color:#0369a1;">1.00</td>
+                <td style="text-align: left;">Sem co-ocorrência direta com Programação ($T_{23} = 0.00$).</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="academic-note">
+          <strong>Rigor Algébrico (Baeza-Yates / Wong):</strong><br>
+          1. <strong>Diagonal Unitária ($1.00$):</strong> Consequência direta da normalização euclidiana dos coeficientes $\hat{c}_{i,r}$.<br>
+          2. <strong>Aritmética Exata:</strong> $T(\text{Robótica}, \text{Programação}) = \frac{1}{\sqrt{2}} \times \frac{1}{\sqrt{2}} = \mathbf{0.50}$ e $T(\text{Robótica}, \text{Automação}) = \frac{1}{\sqrt{2}} \times 1.0 \approx \mathbf{0.71}$.<br>
+          3. <strong>Produto Nulo ($T_{23} = 0.00$):</strong> Como <em>Programação</em> e <em>Automação</em> não co-ocorrem em nenhum documento do mini-corpus, não compartilham mintermos ativos ($\sum \hat{c}_{2,r}\hat{c}_{3,r} = 0.00$). O resgate de $D_1$ na busca por Automação ocorre pela projeção de $D_1$ sobre $m_5$ através de Robótica, e não por correlação espúria em $T$.
+        </div>
+      </div>
+    </section>
+    <!-- SLIDE 22 -->
+    <section class="slide" data-slide="22">
+      <div class="slide-content">
+        <div class="part-tag amber">Parte 3: Formalização Matricial</div>
+        <h2 class="slide-heading">Representação em Grafo de Afinidade</h2>
+        <p class="slide-subtitle">Topologia da rede semântica de 1ª ordem induzida pela Matriz $T = \hat{C}\hat{C}^T$.</p>
+
+        <div class="grid-2" style="align-items: center;">
+          <div style="background: #ffffff; border: 1px solid var(--border-subtle); border-radius: 8px; padding: 1.5rem; text-align: center; box-shadow: var(--shadow-sm);">
+            <svg viewBox="0 0 280 200" width="260" height="190">
+              <!-- Arestas de 1ª Ordem com Valores Exatos -->
+              <line x1="140" y1="40" x2="60" y2="150" stroke="#4f46e5" stroke-width="3" opacity="0.8"/>
+              <text x="85" y="85" fill="#3730a3" font-size="11" font-weight="700">T = 0.50</text>
+
+              <line x1="140" y1="40" x2="220" y2="150" stroke="#16a34a" stroke-width="3.5" opacity="0.8"/>
+              <text x="190" y="85" fill="#166534" font-size="11" font-weight="700">T = 0.71</text>
+
+              <!-- Sem Aresta entre Programação e Automação -->
+              <line x1="60" y1="150" x2="220" y2="150" stroke="#cbd5e1" stroke-width="1.5" stroke-dasharray="3,3" opacity="0.6"/>
+              <text x="140" y="175" fill="#94a3b8" font-size="10" font-weight="600" text-anchor="middle">T = 0.00 (Sem Aresta Direta)</text>
+
+              <!-- Vértices dos Termos -->
+              <circle cx="140" cy="40" r="26" fill="#f0f9ff" stroke="#0284c7" stroke-width="2.5"/>
+              <text x="140" y="44" fill="#0369a1" font-size="9.5" font-weight="700" text-anchor="middle">Robótica</text>
+
+              <circle cx="60" cy="150" r="26" fill="#eef2ff" stroke="#4f46e5" stroke-width="2.5"/>
+              <text x="60" y="154" fill="#3730a3" font-size="9.5" font-weight="700" text-anchor="middle">Programação</text>
+
+              <circle cx="220" cy="150" r="26" fill="#ecfdf5" stroke="#16a34a" stroke-width="2.5"/>
+              <text x="220" y="154" fill="#166534" font-size="9.5" font-weight="700" text-anchor="middle">Automação</text>
+            </svg>
+          </div>
+
+          <div class="academic-card highlight">
+            <div class="card-title">Topologia de Grafo e Resgate Documental</div>
+            <p class="card-desc">
+              O grafo reflete fielmente as propriedades algébricas de 1ª ordem do GVSM:
+            </p>
+            <ul style="padding-left: 1.2rem; font-size: 0.88rem; color: #334155; line-height: 1.6; margin: 0.6rem 0;">
+              <li><strong>Nó Central (Hub):</strong> <em>Robótica</em> atua como conector dos mintermos $m_6$ e $m_5$.</li>
+              <li><strong>Aresta Ausente ($T=0.00$):</strong> A transitividade de 2ª ordem entre palavras sem co-ocorrência direta pertence a modelos de redução de posto (LSI/SVD), não ao GVSM puro.</li>
+              <li><strong>Mecanismo de Resgate:</strong> Ao buscar por <em>Automação</em>, o Documento 1 é recuperado porque a palavra <em>Robótica</em> nele presente carrega peso em $m_5$!</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- SLIDE 23 -->
+    <section class="slide" data-slide="23">
+      <div class="slide-content">
+        <div class="part-tag">Parte 4: Recuperação e Avaliação</div>
+        <h2 class="slide-heading">Representação da Consulta e dos Documentos</h2>
+        <p class="slide-subtitle">Formalização dos vetores no espaço de mintermos generalizado.</p>
+
+        <div class="grid-2">
+          <div class="academic-card">
+            <div class="card-title">Representação no VSM Clássico</div>
+            <div class="katex-display-box">
+              $$\vec{d} = \sum_{i=1}^T w_{i,d} \, \vec{t}_i \quad (\vec{t}_i \cdot \vec{t}_j = \delta_{ij})$$
+            </div>
+            <p class="card-desc">
+              Cada dimensão representa um termo ortogonal estrito.
+            </p>
+          </div>
+
+          <div class="academic-card highlight">
+            <div class="card-title">Representação no GVSM</div>
+            <div class="katex-display-box">
+              $$\vec{d}_{GVSM} = \sum_{r=1}^p \left( \sum_{i=1}^T w_{i,d} \, \hat{c}_{i,r} \right) \vec{m}_r$$
+            </div>
+            <div class="academic-note">
+              <strong>Mecanismo de Projeção:</strong> As coordenadas do documento passam a ser expressas na base de mintermos ativos $\vec{m}_r$, ponderadas pela Matriz Normalizada $\hat{C}$.
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- SLIDE 24 -->
+    <section class="slide" data-slide="24">
+      <div class="slide-content">
+        <div class="part-tag">Parte 4: Recuperação e Avaliação</div>
+        <h2 class="slide-heading">Operação de Projeção no Espaço Semântico</h2>
+        <p class="slide-subtitle">Mapeamento linear da consulta para o subespaço de correlações.</p>
+
+        <div class="grid-3">
+          <div class="academic-card">
+            <div class="card-title">1. Vetor de Entrada</div>
+            <p class="card-desc">Vetorização inicial da consulta em termos léxicos: $\vec{q} = (w_{1,q}, \dots, w_{T,q})^T$.</p>
+          </div>
+
+          <div class="academic-card highlight">
+            <div class="card-title">2. Projeção Matricial</div>
+            <p class="card-desc">Multiplicação pelo operador de projeção normalizado: $\vec{q}' = \hat{C}^T \vec{q}$, gerando um vetor de dimensão $p$.</p>
+          </div>
+
+          <div class="academic-card">
+            <div class="card-title">3. Espaço Expandido</div>
+            <p class="card-desc">A consulta adquire componentes positivas nos mintermos ativados por co-ocorrência.</p>
+          </div>
+        </div>
+
+        <div class="academic-note" style="margin-top: 1.5rem;">
+          <strong>Efeito Matemático:</strong> A consulta expande sua ativação direcional no espaço vetorial, aproximando-se de documentos redigidos com sinônimos ou termos afins.
+        </div>
+      </div>
+    </section>
+    <!-- SLIDE 25 -->
+    <section class="slide" data-slide="25">
+      <div class="slide-content">
+        <div class="part-tag">Parte 4: Recuperação e Avaliação</div>
+        <h2 class="slide-heading">Métrica de Similaridade por Cosseno</h2>
+        <p class="slide-subtitle">Determinação do grau de proximidade angular no espaço generalizado.</p>
+
+        <div class="katex-display-box" style="padding: 1.3rem;">
+          $$\text{sim}(q, d) = \frac{\vec{q}_{GVSM} \cdot \vec{d}_{GVSM}}{\|\vec{q}_{GVSM}\| \cdot \|\vec{d}_{GVSM}\|} = \frac{\sum_{r=1}^p q_r' \, d_r'}{\sqrt{\sum_{r=1}^p (q_r')^2} \cdot \sqrt{\sum_{r=1}^p (d_r')^2}}$$
+        </div>
+
+        <div class="academic-note">
+          <strong>Definição Conceitual:</strong> Esta equação mede o cosseno do ângulo formado entre a consulta e o documento no espaço de mintermos. Como a Matriz $\hat{C}$ induz proximidade entre termos correlacionados, documentos conceitualmente afins apresentam $\text{sim}(q, d) \to 1.0$.
+        </div>
+
+        <div class="grid-2" style="margin-top: 1rem;">
+          <div class="academic-card">
+            <div class="card-title">Produto Escalar</div>
+            <p class="card-desc">Mede a congruência das componentes ativadas em cada mintermo ativo.</p>
+          </div>
+          <div class="academic-card">
+            <div class="card-title">Fator de Normalização</div>
+            <p class="card-desc">Elimina a dependência da extensão do documento, avaliando apenas a orientação vetorial.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 26 -->
+    <section class="slide" data-slide="26">
+      <div class="slide-content">
+        <div class="part-tag">Parte 4: Recuperação e Avaliação</div>
+        <h2 class="slide-heading">Quadro Comparativo: VSM vs. GVSM</h2>
+        <p class="slide-subtitle">Síntese das características analíticas de cada modelo de representação.</p>
+
+        <div class="matrix-container">
+          <table class="matrix-table" style="font-size: 0.85rem;">
+            <thead>
+              <tr>
+                <th>Critério Teórico / Operacional</th>
+                <th style="color: #64748b;">Modelo Vetorial Clássico (VSM)</th>
+                <th style="color: #0369a1;">Modelo Generalizado (GVSM)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td style="font-weight:700;">Base Dimensional</td>
+                <td>Termos do vocabulário ($t_i$)</td>
+                <td style="color: #0369a1; font-weight:600;">Mintermos ativos ($m_r$)</td>
+              </tr>
+              <tr>
+                <td style="font-weight:700;">Correlação entre Termos</td>
+                <td>Ortogonalidade rígida ($90^\circ$, correlação zero)</td>
+                <td style="color: #0369a1; font-weight:700;">Ângulos agudos empíricos ($\theta &lt; 90^\circ$)</td>
+              </tr>
+              <tr>
+                <td style="font-weight:700;">Tratamento da Sinonímia</td>
+                <td style="color: #dc2626;">Sensível a divergências lexicais</td>
+                <td style="color: #059669; font-weight:600;">Robusto via mintermos compartilhados</td>
+              </tr>
+              <tr>
+                <td style="font-weight:700;">Dependência Externa</td>
+                <td>Nenhuma</td>
+                <td style="color: #059669; font-weight:600;">Totalmente não supervisionado</td>
+              </tr>
+              <tr>
+                <td style="font-weight:700;">Custo Computacional</td>
+                <td>Mínimo</td>
+                <td>Moderado (operações sobre matrizes $\hat{C}$ e $T$)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 27 -->
+    <section class="slide" data-slide="27">
+      <div class="slide-content">
+        <div class="part-tag">Parte 4: Recuperação e Avaliação</div>
+        <h2 class="slide-heading">Vantagens Estruturais e Limitações Práticas</h2>
+        <p class="slide-subtitle">Análise crítica dos trade-offs computacionais e representacionais.</p>
+
+        <div class="grid-2">
+          <div class="academic-card highlight">
+            <div class="card-title">Vantagens Estruturais</div>
+            <ul style="padding-left: 1.2rem; font-size: 0.88rem; color: #334155; line-height: 1.6;">
+              <li><strong>Ganho de Revocação (Recall):</strong> Identifica documentos relevantes na presença de variação vocabular.</li>
+              <li><strong>Indução Empírica Não Supervisionada:</strong> Dispensa a criação e manutenção de tesauros ou dicionários manuais.</li>
+              <li><strong>Preservação da Estrutura Vetorial:</strong> Mantém a compatibilidade com a métrica de cosseno.</li>
+            </ul>
+          </div>
+
+          <div class="academic-card danger">
+            <div class="card-title">Limitações e Considerações Práticas</div>
+            <ul style="padding-left: 1.2rem; font-size: 0.88rem; color: #334155; line-height: 1.6;">
+              <li><strong>Sensibilidade à Polissemia:</strong> Termos ambíguos podem induzir correlações entre domínios distintos.</li>
+              <li><strong>Manutenção Dinâmica:</strong> A inserção de novos documentos exige a atualização periódica da Matriz $C$.</li>
+              <li><strong>Esparsidade em Escala:</strong> Requer estruturas de dados especializadas para coleções com milhões de itens.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 28 -->
+    <section class="slide" data-slide="28">
+      <div class="slide-content">
+        <div class="part-tag">Parte 4: Recuperação e Avaliação</div>
+        <h2 class="slide-heading">Análise de Complexidade Computacional</h2>
+        <p class="slide-subtitle">Classificação assintótica das fases de pré-processamento e consulta.</p>
+
+        <div class="grid-3">
+          <div class="academic-card">
+            <div class="card-title">Construção da Matriz $\hat{C}$</div>
+            <div class="katex-display-box" style="margin: 0.5rem 0;">
+              $$\mathcal{O}(N \cdot T)$$
+            </div>
+            <p class="card-desc">Processamento linear sobre o número de documentos e termos indexados.</p>
+          </div>
+
+          <div class="academic-card">
+            <div class="card-title">Cálculo da Matriz $T = \hat{C}\hat{C}^T$</div>
+            <div class="katex-display-box" style="margin: 0.5rem 0;">
+              $$\mathcal{O}(T^2 \cdot p)$$
+            </div>
+            <p class="card-desc">Operação matricial realizada em lote durante a fase de indexação offline.</p>
+          </div>
+
+          <div class="academic-card highlight">
+            <div class="card-title">Consulta em Tempo Real</div>
+            <div class="katex-display-box" style="margin: 0.5rem 0;">
+              $$\mathcal{O}(p \cdot N)$$
+            </div>
+            <p class="card-desc">Avaliação de similaridade por cosseno no subespaço de mintermos ativos.</p>
+          </div>
+        </div>
+
+        <div class="academic-note" style="margin-top: 1.5rem;">
+          <strong>Conclusão Assintótica:</strong> O processamento matricial intensivo concentra-se na fase preliminar de indexação, garantindo tempo de resposta subsegundo no atendimento a consultas interativas.
+        </div>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         PARTE 5: CONEXÕES MODERNAS E LABORATÓRIO INTERATIVO (Slides 29 a 30)
+         ==================================================================== -->
+
+    <!-- SLIDE 29 -->
+    <section class="slide" data-slide="29">
+      <div class="slide-content">
+        <div class="part-tag indigo">Parte 5: Evolução e Laboratório</div>
+        <h2 class="slide-heading">Evolução Histórica dos Modelos Semânticos</h2>
+        <p class="slide-subtitle">A linha evolutiva que conecta Wong (1985) aos modelos neurais contemporâneos.</p>
+
+        <div class="visual-pipeline">
+          <div class="pipeline-step">
+            <div class="pipeline-step-num">1975</div>
+            <div class="pipeline-step-title">VSM (Salton)</div>
+            <p style="font-size: 0.8rem; color: #475569;">Ortogonalidade axiomática e indexação invertida básica.</p>
+          </div>
+          <div class="pipeline-arrow">→</div>
+
+          <div class="pipeline-step active">
+            <div class="pipeline-step-num">1985</div>
+            <div class="pipeline-step-title">GVSM (Wong et al.)</div>
+            <p style="font-size: 0.8rem; color: #475569;">Pioneirismo no fechamento angular por co-ocorrência em mintermos.</p>
+          </div>
+          <div class="pipeline-arrow">→</div>
+
+          <div class="pipeline-step">
+            <div class="pipeline-step-num">1990</div>
+            <div class="pipeline-step-title">LSI / LSA (Deerwester)</div>
+            <p style="font-size: 0.8rem; color: #475569;">Redução de dimensionalidade por Decomposição em Valores Singulares (SVD).</p>
+          </div>
+          <div class="pipeline-arrow">→</div>
+
+          <div class="pipeline-step">
+            <div class="pipeline-step-num">2013-Atual</div>
+            <div class="pipeline-step-title">Embeddings Neurais</div>
+            <p style="font-size: 0.8rem; color: #475569;">Representações distribuídas densas aprendidas por redes neurais (Word2Vec, BERT).</p>
+          </div>
+        </div>
+
+        <div class="academic-note" style="margin-top: 1.5rem;">
+          <strong>Conexão Teórica:</strong> O princípio fundamental inaugurado pelo GVSM — derivar afinidade semântica a partir da co-ocorrência de palavras em contextos compartilhados — constitui a base epistemológica do processamento de linguagem natural contemporâneo.
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 30: SIMULADOR INTERATIVO -->
+    <section class="slide" data-slide="30">
+      <div class="slide-content" style="max-width: 1120px;">
+        <div class="part-tag emerald">Laboratório Prático Interativo</div>
+        <h2 class="slide-heading">Laboratório Interativo: Simulação Comparativa VSM vs. GVSM</h2>
+        <p class="slide-subtitle">Análise em tempo de execução do comportamento de similaridade e inspeção das matrizes de projeção.</p>
+
+        <div class="sim-container">
+          <!-- Campo de Busca -->
+          <div class="search-bar-box">
+            <input type="text" id="search-query-input" class="search-input" value="automação" placeholder="Insira termos para consulta (ex: robótica, automação, programação)...">
+            <button id="btn-exec-search" class="btn-search">
+              Buscar
+            </button>
+          </div>
+
+          <!-- Sugestões Rápidas -->
+          <div class="quick-queries">
+            <span style="font-size: 0.76rem; color: #64748b; margin-right: 0.3rem; font-weight:600;">Consultas de Referência:</span>
+            <button class="quick-btn" data-query="automação">"automação"</button>
+            <button class="quick-btn" data-query="robótica">"robótica"</button>
+            <button class="quick-btn" data-query="programação e automação">"programação e automação"</button>
+            <button class="quick-btn" data-query="sensores de robótica">"sensores de robótica"</button>
+            <button class="quick-btn" data-query="algoritmos">"algoritmos"</button>
+          </div>
+
+          <!-- Abas de Navegação do Simulador -->
+          <div class="sim-tabs">
+            <button class="sim-tab-btn active" data-tab="tab-ranking">Ranking e Medidor Angular</button>
+            <button class="sim-tab-btn" data-tab="tab-matrix-c">Matriz de Padrões $\hat{C}$ (|V| x p)</button>
+            <button class="sim-tab-btn" data-tab="tab-matrix-t">Matriz de Correlação $T = \hat{C}\hat{C}^T$ (|V| x |V|)</button>
+            <button class="sim-tab-btn" data-tab="tab-step-by-step">Decomposição Analítica</button>
+          </div>
+
+          <!-- PANE 1: RANKING COM MEDIDOR CIRCULAR -->
+          <div class="sim-tab-pane active" id="tab-ranking">
+            <div class="ranking-grid-visual">
+              <div id="ranking-results-list">
+                <!-- Renderizado via JS -->
+              </div>
+
+              <!-- Painel do Medidor Circular -->
+              <div class="gauge-panel">
+                <div style="font-size: 0.85rem; font-weight: 700; color: #0f172a; margin-bottom: 0.2rem;">Medidor Angular de Similaridade</div>
+                <div id="gauge-doc-title" style="font-size: 0.78rem; color: #0369a1; margin-bottom: 0.8rem; font-family: var(--font-mono); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-weight:600;">
+                  Documento Selecionado
+                </div>
+
+                <div class="gauge-svg-wrapper">
+                  <div id="gauge-svg-container">
+                    <!-- SVG do gauge inserido via JS -->
+                  </div>
+                  <div class="gauge-score-text" id="gauge-val-text">0.000</div>
+                </div>
+
+                <div class="gauge-score-sub" id="gauge-sub-info" style="margin-top: 0.6rem;">
+                  Similaridade Angular GVSM
+                </div>
+
+                <div class="academic-note" style="margin-top: 1rem; text-align: left; font-size: 0.78rem; padding: 0.5rem 0.7rem;">
+                  <strong>Legenda do Medidor:</strong> O arco azul externo corresponde à similaridade GVSM; o arco cinza interno representa o score VSM clássico.
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- PANE 2: MATRIZ C -->
+          <div class="sim-tab-pane" id="tab-matrix-c">
+            <p style="font-size: 0.82rem; color: #475569; margin-bottom: 0.75rem;">
+              Posicione o cursor sobre os valores para inspecionar os pesos normalizados calculados sobre cada mintermo ativo.
+            </p>
+            <div class="matrix-container">
+              <table class="matrix-table" id="matrix-c-table">
+                <!-- Renderizado via JS -->
+              </table>
+            </div>
+          </div>
+
+          <!-- PANE 3: MATRIZ T -->
+          <div class="sim-tab-pane" id="tab-matrix-t">
+            <p style="font-size: 0.82rem; color: #475569; margin-bottom: 0.75rem;">
+              Matriz de correlação empírica calculada por $T = \hat{C}\hat{C}^T$, determinando os cossenos mútuos exatos entre os pares de termos.
+            </p>
+            <div class="matrix-container">
+              <table class="matrix-table" id="matrix-t-table">
+                <!-- Renderizado via JS -->
+              </table>
+            </div>
+          </div>
+
+          <!-- PANE 4: DECOMPOSIÇÃO ANALÍTICA -->
+          <div class="sim-tab-pane" id="tab-step-by-step">
+            <div id="step-by-step-content">
+              <!-- Renderizado via JS -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Barra Inferior de Navegação -->
+  <footer class="bottom-controls">
+    <div class="slide-counter">
+      SLIDE <span class="current">01</span> / 30
+    </div>
+
+    <div class="arrow-controls">
+      <button class="ctrl-btn" id="btn-prev" title="Slide Anterior (Seta Esquerda)" disabled>◀</button>
+      <button class="ctrl-btn" id="btn-next" title="Próximo Slide (Seta Direita ou Espaço)">▶</button>
+    </div>
+
+    <div class="keyboard-hint">
+      <span>Navegação:</span>
+      <span class="kbd">◀</span>
+      <span class="kbd">▶</span>
+      <span>ou</span>
+      <span class="kbd">Espaço</span>
+      <span style="margin-left: 0.5rem;">| Visão Geral:</span>
+      <span class="kbd">O</span>
+    </div>
+  </footer>
+
+  <!-- Modal de Visão Geral (Overview Grid) -->
+  <div class="overview-modal" id="overview-modal">
+    <div class="overview-content-card">
+      <div class="overview-header">
+        <h2 style="font-size: 1.3rem; color: #0f172a; font-weight:700;">Índice Geral de Slides (GVSM)</h2>
+        <button class="nav-btn" id="btn-close-overview">Fechar</button>
+      </div>
+      <div class="overview-grid" id="overview-grid">
+        <!-- Gerado via JS -->
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>
